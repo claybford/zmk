@@ -23,11 +23,9 @@
 
 #include <zephyr/logging/log.h>
 
-#define MSG_SIZE 32
-
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-NET_BUF_SIMPLE_DEFINE_STATIC(rx_buf, MSG_SIZE);
+NET_BUF_SIMPLE_DEFINE_STATIC(rx_buf, CONFIG_ZMK_STUDIO_MAX_MSG_SIZE);
 
 static enum studio_framing_state rpc_framing_state;
 
@@ -44,17 +42,6 @@ static ssize_t read_rpc_resp(struct bt_conn *conn, const struct bt_gatt_attr *at
 
     LOG_DBG("Read response for length %d at offset %d", len, offset);
     return 0;
-
-    // const uint8_t source = (uint8_t)(uint32_t)attr->user_data;
-    // uint8_t level = 0;
-    // int rc = zmk_split_get_peripheral_battery_level(source, &level);
-
-    // if (rc == -EINVAL) {
-    //     LOG_ERR("Invalid peripheral index requested for battery level read: %d", source);
-    //     return 0;
-    // }
-
-    // return bt_gatt_attr_read(conn, attr, buf, len, offset, &level, sizeof(uint8_t));
 }
 
 static void send_response(struct bt_conn *conn, const zmk_Response *response);
@@ -96,7 +83,8 @@ BT_GATT_SERVICE_DEFINE(
     BT_GATT_CCC(rpc_ccc_cfg_changed, BT_GATT_PERM_READ_ENCRYPT | BT_GATT_PERM_WRITE_ENCRYPT));
 
 static void send_response(struct bt_conn *conn, const zmk_Response *response) {
-    uint8_t resp_data[128];
+    uint8_t resp_data[CONFIG_ZMK_STUDIO_MAX_MSG_SIZE];
+
     pb_ostream_t stream = pb_ostream_from_buffer(resp_data, ARRAY_SIZE(resp_data));
 
     /* Now we are ready to encode the message! */
@@ -109,7 +97,7 @@ static void send_response(struct bt_conn *conn, const zmk_Response *response) {
 
     size_t out_size = stream.bytes_written;
 
-    uint8_t resp_frame[128];
+    uint8_t resp_frame[CONFIG_ZMK_STUDIO_MAX_MSG_SIZE * 2];
 
     int frame_encoded_size =
         studio_framing_encode_frame(resp_data, out_size, resp_frame, sizeof(resp_frame));

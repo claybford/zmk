@@ -2,10 +2,15 @@
 menuconfig ZMK_STUDIO
     bool "Studio Support"
     select NANOPB
+    select ZMK_BEHAVIOR_METADATA
     help
       Add firmware support for realtime keymap updates (ZMK Studio
 
 if ZMK_STUDIO
+
+config ZMK_STUDIO_MAX_MSG_SIZE
+    int "Max RPC message size"
+    default 64
 
 menu "Interfaces"
 
