@@ -14,13 +14,8 @@
 
 #include "common.h"
 
-// #include <studio-msgs_decode.h>
-// #include <studio-msgs_encode.h>
-
 #include <pb_encode.h>
 #include <pb_decode.h>
-
-#include <proto/zmk/studio-msgs.pb.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 

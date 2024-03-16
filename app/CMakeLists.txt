@@ -115,6 +115,7 @@ if (CONFIG_ZMK_STUDIO)
 
   zephyr_nanopb_sources(app
                         proto/zmk/studio.proto
+                        proto/zmk/meta.proto
                         proto/zmk/core.proto
                         proto/zmk/behaviors.proto
                         proto/zmk/keymap.proto

@@ -19,8 +19,6 @@
 #include <pb_encode.h>
 #include <pb_decode.h>
 
-#include <proto/zmk/studio-msgs.pb.h>
-
 #include <zephyr/logging/log.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);

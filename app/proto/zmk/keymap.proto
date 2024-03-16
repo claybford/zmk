@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package zmk.keymap;
 
-message request {
+message Request {
     oneof request_type {
         bool get_layer_summaries = 1;
     }

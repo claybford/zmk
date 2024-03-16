@@ -2,29 +2,29 @@ syntax = "proto3";
 
 package zmk.behaviors;
 
-message request {
+message Request {
     oneof request_type {
         bool list_all_behaviors = 1;
-        get_behavior_details_request get_behavior_details = 2;
+        GetBehaviorDetailsRequest get_behavior_details = 2;
     }
 }
 
-message get_behavior_details_request {
+message GetBehaviorDetailsRequest {
     uint32 behavior_id = 1;
 }
 
-message response {
+message Response {
     oneof response_type {
-        list_all_behaviors_response list_all_behaviors = 1;
-        get_behavior_details_response get_behavior_details = 2;
+        ListAllBehaviorsResponse list_all_behaviors = 1;
+        GetBehaviorDetailsResponse get_behavior_details = 2;
     }
 }
 
-message list_all_behaviors_response {
+message ListAllBehaviorsResponse {
     repeated uint32 behaviors = 1;
 }
 
-message get_behavior_details_response {
+message GetBehaviorDetailsResponse {
     uint32 id = 1;
     string friendly_name = 2;
     behavior_binding_parameter_details param1 = 3;
@@ -36,8 +36,24 @@ message behavior_binding_parameter_details {
     string name = 2;
 }
 
-enum behavior_binding_parameter_domain {
-    Nil = 0;
-    HIDUsage = 1;
-    LayerIndex = 2;
+message behavior_binding_parameter_domain {
+    oneof type {
+        behavior_binding_parameter_domain_standard standard = 1;
+        behavior_binding_parameter_domain_custom custom = 2;
+    }
+}
+
+message behavior_binding_parameter_domain_custom {
+    repeated behavior_binding_parameter_value_description values = 1;
+}
+
+message behavior_binding_parameter_value_description {
+    int32 value = 1;
+    string name = 2;
+}
+
+enum behavior_binding_parameter_domain_standard {
+    NIL = 0;
+    HID_USAGE = 1;
+    LAYER_INDEX = 2;
 }

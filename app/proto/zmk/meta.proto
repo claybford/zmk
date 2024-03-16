@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package zmk.meta;
+
+enum ErrorConditions {
+    GENERIC = 0;
+    RPC_NOT_FOUND = 1;
+    MSG_DECODE_FAILED = 2;
+    MSG_ENCODE_FAILED = 3;
+}
+
+message Response {
+    oneof response_type {
+        ErrorConditions simple_error = 1;
+    }
+}

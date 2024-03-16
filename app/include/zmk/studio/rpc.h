@@ -3,7 +3,7 @@
 
 #include <zephyr/sys/iterable_sections.h>
 
-#include <proto/zmk/studio-msgs.pb.h>
+#include <proto/zmk/studio.pb.h>
 
 struct zmk_rpc_subsystem;
 
@@ -39,8 +39,7 @@ struct zmk_rpc_subsystem_handler {
             }                                                                                      \
         }                                                                                          \
         LOG_ERR("No handler func found for %d", which_req);                                        \
-        zmk_Response fallback_resp = zmk_Response_init_zero;                                       \
-        return fallback_resp;                                                                      \
+        return ZMK_RPC_RESPONSE(meta, simple_error, zmk_meta_ErrorConditions_RPC_NOT_FOUND);       \
     }                                                                                              \
     STRUCT_SECTION_ITERABLE(zmk_rpc_subsystem, prefix##_subsystem) = {                             \
         .func = subsystem_func_##prefix,                                                           \
@@ -52,7 +51,7 @@ struct zmk_rpc_subsystem_handler {
                             prefix##_subsystem_handler_##request_id) = {                           \
         .func = request_id,                                                                        \
         .subsystem_choice = zmk_Request_##prefix##_tag,                                            \
-        .request_choice = zmk_##prefix##_response_##request_id##_tag,                              \
+        .request_choice = zmk_##prefix##_Response_##request_id##_tag,                              \
     };
 
 #define ZMK_RPC_RESPONSE(subsys, _type, ...)                                                       \
@@ -68,7 +67,7 @@ struct zmk_rpc_subsystem_handler {
                                 .subsys =                                                          \
                                     {                                                              \
                                         .which_response_type =                                     \
-                                            zmk_##subsys##_response_##_type##_tag,                 \
+                                            zmk_##subsys##_Response_##_type##_tag,                 \
                                         .response_type = {._type = __VA_ARGS__},                   \
                                     },                                                             \
                             },                                                                     \

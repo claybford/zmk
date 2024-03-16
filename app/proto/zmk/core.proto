@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package zmk.core;
 
-message request {
+message Request {
     oneof request_type {
         bool get_lock_status = 1;
         bool unlock_request = 2;
@@ -10,12 +10,12 @@ message request {
     }
 }
 
-message get_lock_status_response {
+message GetLockStatusResponse {
     bool locked = 1;
 }
 
-message response {
+message Response {
     oneof response_type {
-        get_lock_status_response get_lock_status = 1;
+        GetLockStatusResponse get_lock_status = 1;
     }
 }

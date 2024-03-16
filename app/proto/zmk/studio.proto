@@ -3,6 +3,7 @@ syntax = "proto3";
 
 package zmk;
 
+import "meta.proto";
 import "core.proto";
 import "behaviors.proto";
 import "keymap.proto";
@@ -11,28 +12,11 @@ message Request {
     uint32 request_id = 1;
 
     oneof subsystem {
-        zmk.core.request core = 2;
-        zmk.keymap.request keymap = 3;
-        zmk.behaviors.request behaviors = 4;
+        zmk.core.Request core = 2;
+        zmk.keymap.Request keymap = 3;
+        zmk.behaviors.Request behaviors = 4;
     }
 }
-
-
-// keymap_request = {
-//     (0: get_layers_summary)
-// }
-
-// behavior_request = {
-//     (0: list_all_behaviors) /
-//     (1: get_behavior_details)
-// }
-
-// get_layers_summary = nil
-
-// list_all_behaviors = nil
-// get_behavior_details = [ behavior_id: uint ]
-
-// ; Responses
 
 message Response {
     oneof type {
@@ -44,12 +28,12 @@ message Response {
 message RequestResponse {
     uint32 request_id = 1;
     oneof subsystem {
-        zmk.core.response core = 2;
-        zmk.behaviors.response behaviors = 4;
+        zmk.meta.Response meta = 2;
+        zmk.core.Response core = 3;
+        zmk.behaviors.Response behaviors = 4;
     }
 }
 
 message Notification {
     uint32 notification_type = 1;
-
 }
