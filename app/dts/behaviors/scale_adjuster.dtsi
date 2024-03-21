@@ -7,7 +7,7 @@
         scale_adjuster: scale_adjuster {
             compatible = "zmk,beh-scale-adjuster";
             label = "SCALE_ADJUSTER";
-            #binding-cells = <2>; /* Two cells: row, column */
+            #binding-cells = <0>;
             /* The properties below are placeholders. Adjust them according to your needs */
             temp_multiplier = <23>; /* Temporary scale multiplier */
             temp_divisor = <8>; /* Temporary scale divisor */

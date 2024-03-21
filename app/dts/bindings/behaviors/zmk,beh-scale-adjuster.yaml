@@ -1,6 +1,6 @@
 description: Custom behavior for dynamic scale adjustment
 
-compatible: "zmk,behavior-scale-adjuster"
+compatible: "zmk,beh-scale-adjuster"
 
 include: zero_param.yaml
 
