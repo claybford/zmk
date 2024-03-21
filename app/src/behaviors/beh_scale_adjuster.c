@@ -2,8 +2,7 @@
 // Hacked-in mouse key speed change
 
 #include <zephyr/device.h>
-#include <zephyr/drivers/behavior.h>
-#include <zephyr/zmk/behavior.h>
+#include <drivers/behavior.h>
 #include <zmk/input_listener_custom.h>
 
 extern void input_listener_set_temp_scale(uint16_t multiplier, uint16_t divisor);
