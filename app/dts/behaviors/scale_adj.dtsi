@@ -5,7 +5,7 @@
 / {
     behaviors {
         scale_adj: scale_adj {
-            compatible = "zmk,beh-scale-adjuster";
+            compatible = "zmk,behavior-scale-adjuster";
             #binding-cells = <0>;
             /* The properties below are placeholders. Adjust them according to your needs */
             temp_multiplier = <23>; /* Temporary scale multiplier */
