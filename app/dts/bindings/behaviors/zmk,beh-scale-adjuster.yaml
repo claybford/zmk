@@ -1,0 +1,16 @@
+description: Custom behavior for dynamic scale adjustment
+
+compatible: "zmk,behavior-scale-adjuster"
+
+include: zero_param.yaml
+
+properties:
+  temp_multiplier:
+    type: int
+    required: false
+    description: Temporary scale multiplier
+
+  temp_divisor:
+    type: int
+    required: false
+    description: Temporary scale divisor
