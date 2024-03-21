@@ -15,6 +15,27 @@
 #include <zmk/endpoints.h>
 #include <zmk/hid.h>
 
+
+
+// Hacked-in mouse key speed change
+#include <zephyr/types.h>
+#include <stdbool.h>
+#include <zmk/input_listener_custom.h>
+static uint16_t temp_scale_multiplier = 23; // Temp value (can be updated dynamically)
+static uint16_t temp_scale_divisor = 8; // Temp value (can be updated dynamically)
+static bool use_temp_scale = false; // Flag to toggle scale value usage
+// Function to update temporary scale multiplier and divisor
+void input_listener_set_temp_scale(uint16_t multiplier, uint16_t divisor) {
+    temp_scale_multiplier = multiplier;
+    temp_scale_divisor = divisor;
+}
+// Function to toggle the use of temporary scale values
+void input_listener_toggle_use_temp_scale(bool use_temp) {
+    use_temp_scale = use_temp;
+}
+
+
+
 enum input_listener_xy_data_mode {
     INPUT_LISTENER_XY_DATA_MODE_NONE,
     INPUT_LISTENER_XY_DATA_MODE_REL,
@@ -113,7 +134,12 @@ static void filter_with_input_config(const struct input_listener_config *cfg,
         evt->value = -(evt->value);
     }
 
-    evt->value = (int16_t)((evt->value * cfg->scale_multiplier) / cfg->scale_divisor);
+    //evt->value = (int16_t)((evt->value * cfg->scale_multiplier) / cfg->scale_divisor);
+
+    // Hacked-in mouse key speed change replacing the direct usage of cfg->scale_multiplier and cfg->scale_divisor
+    // with logic that selects between cfg and temporary values based on use_temp_scale flag.
+    evt->value = (int16_t)((evt->value * (use_temp_scale ? temp_scale_multiplier : cfg->scale_multiplier)) / 
+                        (use_temp_scale ? temp_scale_divisor : cfg->scale_divisor));
 }
 
 static void clear_xy_data(struct input_listener_xy_data *data) {
