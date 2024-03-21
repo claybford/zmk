@@ -15,6 +15,9 @@
 #include <zmk/endpoints.h>
 #include <zmk/hid.h>
 
+#include <zephyr/logging/log.h>
+
+LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 
 // Hacked-in mouse key speed change
@@ -26,11 +29,13 @@ static uint16_t temp_scale_divisor = 8; // Temp value (can be updated dynamicall
 static bool use_temp_scale = false; // Flag to toggle scale value usage
 // Function to update temporary scale multiplier and divisor
 void input_listener_set_temp_scale(uint16_t multiplier, uint16_t divisor) {
+    LOG_DBG("Input listener setting temp scale: multiplier=%d, divisor=%d", multiplier, divisor);
     temp_scale_multiplier = multiplier;
     temp_scale_divisor = divisor;
 }
 // Function to toggle the use of temporary scale values
 void input_listener_toggle_use_temp_scale(bool use_temp) {
+    LOG_DBG("Setting use_temp_scale to %s", use_temp ? "true" : "false");
     use_temp_scale = use_temp;
 }
 

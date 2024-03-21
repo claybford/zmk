@@ -4,6 +4,10 @@
 #include <zephyr/device.h>
 #include <drivers/behavior.h>
 #include <zmk/input_listener_custom.h>
+#include <zmk/keymap.h>
+#include <zephyr/logging/log.h>
+
+LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 extern void input_listener_set_temp_scale(uint16_t multiplier, uint16_t divisor);
 extern void input_listener_toggle_use_temp_scale(bool use_temp);
@@ -14,14 +18,21 @@ struct beh_scale_adjuster_config {
 };
 
 static int beh_scale_adjuster_init(const struct device *dev) {
+    LOG_INF("beh_scale_adjuster_init called"); // Log initialization
     return 0; // Initialization success
 }
 
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding, struct zmk_behavior_binding_event event) {
+    LOG_DBG("Keymap binding pressed"); // Log key press event
     const struct device *dev = device_get_binding(binding->behavior_dev);
+    if (!dev) {
+        LOG_ERR("Failed to get device binding");
+        return -EINVAL;
+    }
     const struct beh_scale_adjuster_config *cfg = dev->config;
 
     // Set the temporary scale values
+    LOG_DBG("Setting temp scale: multiplier=%d, divisor=%d", cfg->temp_multiplier, cfg->temp_divisor);
     input_listener_set_temp_scale(cfg->temp_multiplier, cfg->temp_divisor);
     // Enable temporary scale values
     input_listener_toggle_use_temp_scale(true);
@@ -30,6 +41,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding, struc
 }
 
 static int on_keymap_binding_released(struct zmk_behavior_binding *binding, struct zmk_behavior_binding_event event) {
+    LOG_DBG("Keymap binding released"); // Log key release event
     // Revert to default scale values when the key is released
     input_listener_toggle_use_temp_scale(false);
 
