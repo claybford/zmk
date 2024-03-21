@@ -63,7 +63,7 @@ DEVICE_DT_INST_DEFINE(n, \
                       NULL, \
                       NULL, \
                       &beh_scale_adjuster_config_##n, \
-                      APPLICATION, \
+                      POST_KERNEL, \
                       CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, \
                       &beh_scale_adjuster_driver_api);
 
