@@ -42,6 +42,12 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding, struc
 
 static int on_keymap_binding_released(struct zmk_behavior_binding *binding, struct zmk_behavior_binding_event event) {
     LOG_DBG("Keymap binding released"); // Log key release event
+    const struct device *dev = device_get_binding(binding->behavior_dev);
+    if (!dev) {
+        // Consistent error handling for device binding in the release function
+        LOG_ERR("Failed to get device binding on release");
+        return -EINVAL;
+    }
     // Revert to default scale values when the key is released
     input_listener_toggle_use_temp_scale(false);
 
@@ -58,7 +64,7 @@ static const struct beh_scale_adjuster_config beh_scale_adjuster_config_##n = { 
     .temp_multiplier = DT_INST_PROP(n, temp_multiplier), \
     .temp_divisor = DT_INST_PROP(n, temp_divisor), \
 }; \
-DEVICE_DT_INST_DEFINE(n, \
+BEHAVIOR_DT_INST_DEFINE(n, \
                       beh_scale_adjuster_init, \
                       NULL, \
                       NULL, \
